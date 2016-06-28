@@ -9,11 +9,13 @@ package javaapplication2;
  *
  * @author Maya
  */
+
 public class Login extends javax.swing.JFrame {
 
     /**
      * Creates new form Login
      */
+    
     public Login() {
         initComponents();
     }
@@ -51,6 +53,11 @@ public class Login extends javax.swing.JFrame {
         jLabel3.setText("Password");
 
         jButton1.setText("Login");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                OpenFrame(evt);
+            }
+        });
 
         jButton2.setText("Exit");
 
@@ -116,6 +123,11 @@ public class Login extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void OpenFrame(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OpenFrame
+        TampilData TD = new TampilData();
+        TD.setVisible(false); 
+    }//GEN-LAST:event_OpenFrame
+
     /**
      * @param args the command line arguments
      */
@@ -161,4 +173,8 @@ public class Login extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     // End of variables declaration//GEN-END:variables
+
+    private Object TD() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }
