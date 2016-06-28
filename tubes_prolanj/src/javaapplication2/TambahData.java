@@ -1,5 +1,6 @@
 package javaapplication2;
 
+import java.awt.Component;
 import javax.swing.JOptionPane;
 
 /*
@@ -13,6 +14,8 @@ import javax.swing.JOptionPane;
  * @author billy
  */
 public class TambahData extends javax.swing.JFrame {
+    private int answer;
+    private Component frame;
 
     /**
      * Creates new form TambahData
@@ -163,15 +166,21 @@ public class TambahData extends javax.swing.JFrame {
         JOptionPane.showMessageDialog(null,dialogsave,"Message",JOptionPane.INFORMATION_MESSAGE);
        TampilData td = new TampilData();
        td.setVisible(true);
-       
     }//GEN-LAST:event_ClickSimpan
 
     private void ClickBatal(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ClickBatal
         this.setVisible(false); // tutup tambah data form
        
        // buat form tampil data
-       TampilData td = new TampilData();
-       td.setVisible(true);
+        String dialogbatal = "Yakin ingin membatalkan?";
+        int answer = JOptionPane.showConfirmDialog(frame, dialogbatal);
+        if (answer == JOptionPane.YES_OPTION) {
+            TampilData td = new TampilData();
+            td.setVisible(true);
+    } else if (answer == JOptionPane.NO_OPTION) {
+           TambahData t = new TambahData();
+            t.setVisible(true);
+    }
     }//GEN-LAST:event_ClickBatal
 
     /**
