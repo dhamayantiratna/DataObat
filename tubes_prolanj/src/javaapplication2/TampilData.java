@@ -54,7 +54,13 @@ public class TampilData extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         jLabel1.setText("Data Obat");
 
-        jButton1.setText("Tambah Baru");
+        jButton1.setText("Tambah Data");
+        jButton1.setActionCommand("Tambah Data");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                OpenTambah(evt);
+            }
+        });
 
         jButton2.setText("Ubah");
         jButton2.setEnabled(false);
@@ -83,7 +89,7 @@ public class TampilData extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton3))
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(26, Short.MAX_VALUE))
+                .addContainerGap(24, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -104,6 +110,14 @@ public class TampilData extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void OpenTambah(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OpenTambah
+       this.setVisible(false); // tutup tampil form
+       
+       // buat form tambah data
+       TambahData td = new TambahData();
+       td.setVisible(true);
+    }//GEN-LAST:event_OpenTambah
 
     /**
      * @param args the command line arguments
@@ -153,4 +167,5 @@ public class TampilData extends javax.swing.JFrame {
     private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
+
 }

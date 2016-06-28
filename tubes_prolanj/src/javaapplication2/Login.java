@@ -41,7 +41,7 @@ public class Login extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        jLabel1.setIcon(new javax.swing.ImageIcon("D:\\Bulan\\Campus\\semesterIV\\Prolanj\\TubesProlanj\\tubes_prolanj\\src\\javaapplication2\\icon.png")); // NOI18N
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/javaapplication2/icon.png"))); // NOI18N
         jLabel1.setText("SISTEM INFORMASI APOTEK");
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Administrator Login"));
@@ -55,11 +55,16 @@ public class Login extends javax.swing.JFrame {
         jButton1.setText("Login");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                OpenFrame(evt);
+                OpenLogin(evt);
             }
         });
 
         jButton2.setText("Exit");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CloseLogin(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -113,23 +118,27 @@ public class Login extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(24, 24, 24)
                 .addComponent(jLabel1)
                 .addGap(18, 18, 18)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(30, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void OpenFrame(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OpenFrame
+    private void OpenLogin(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OpenLogin
+                       
        this.setVisible(false); // tutup login form
        
        // buat form tampil data
        TampilData td = new TampilData();
        td.setVisible(true);
-    }//GEN-LAST:event_OpenFrame
+    }//GEN-LAST:event_OpenLogin
+
+    private void CloseLogin(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CloseLogin
+        System.exit(0);
+    }//GEN-LAST:event_CloseLogin
 
     /**
      * @param args the command line arguments

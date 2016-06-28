@@ -1,3 +1,7 @@
+package javaapplication2;
+
+import javax.swing.JOptionPane;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -62,8 +66,18 @@ public class TambahData extends javax.swing.JFrame {
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "pcs", "plex" }));
 
         jButton1.setText("Simpan");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ClickSimpan(evt);
+            }
+        });
 
         jButton2.setText("Batal");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ClickBatal(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -140,6 +154,25 @@ public class TambahData extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void ClickSimpan(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ClickSimpan
+       this.setVisible(false); // tutup tambah data form
+       
+       // buat form tampil data
+       String dialogsave = "Data sudah tersimpan";
+        JOptionPane.showMessageDialog(null,dialogsave,"Message",JOptionPane.INFORMATION_MESSAGE);
+       TampilData td = new TampilData();
+       td.setVisible(true);
+       
+    }//GEN-LAST:event_ClickSimpan
+
+    private void ClickBatal(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ClickBatal
+        this.setVisible(false); // tutup tambah data form
+       
+       // buat form tampil data
+       TampilData td = new TampilData();
+       td.setVisible(true);
+    }//GEN-LAST:event_ClickBatal
 
     /**
      * @param args the command line arguments
