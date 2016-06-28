@@ -124,8 +124,11 @@ public class Login extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void OpenFrame(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OpenFrame
-        TampilData TD = new TampilData();
-        TD.setVisible(false); 
+       this.setVisible(false); // tutup login form
+       
+       // buat form tampil data
+       TampilData td = new TampilData();
+       td.setVisible(true);
     }//GEN-LAST:event_OpenFrame
 
     /**
