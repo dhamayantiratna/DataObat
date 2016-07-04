@@ -76,11 +76,6 @@ public class TambahData extends javax.swing.JFrame {
         });
 
         jButton2.setText("Batal");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ClickBatal(evt);
-            }
-        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -167,21 +162,6 @@ public class TambahData extends javax.swing.JFrame {
        TampilData td = new TampilData();
        td.setVisible(true);
     }//GEN-LAST:event_ClickSimpan
-
-    private void ClickBatal(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ClickBatal
-        this.setVisible(false); // tutup tambah data form
-       
-       // buat form tampil data
-        String dialogbatal = "Yakin ingin membatalkan?";
-        int answer = JOptionPane.showConfirmDialog(frame, dialogbatal);
-        if (answer == JOptionPane.YES_OPTION) {
-            TampilData td = new TampilData();
-            td.setVisible(true);
-    } else if (answer == JOptionPane.NO_OPTION) {
-           TambahData t = new TambahData();
-            t.setVisible(true);
-    }
-    }//GEN-LAST:event_ClickBatal
 
     /**
      * @param args the command line arguments

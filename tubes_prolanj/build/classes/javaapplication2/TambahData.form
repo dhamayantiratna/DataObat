@@ -187,9 +187,6 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Batal"/>
       </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="ClickBatal"/>
-      </Events>
     </Component>
   </SubComponents>
 </Form>
