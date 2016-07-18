@@ -156,22 +156,22 @@ public class TambahData extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void ClickSimpan(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ClickSimpan
-       this.setVisible(false); // tutup tambah data form
-       
-       // buat form tampil data
-       String dialogsave = "Data sudah tersimpan";
-        JOptionPane.showMessageDialog(null,dialogsave,"Message",JOptionPane.INFORMATION_MESSAGE);
-       TampilData td = new TampilData();
-       td.setVisible(true);
+//       this.setVisible(false); // tutup tambah data form
+//       
+//       // buat form tampil data
+//       String dialogsave = "Data sudah tersimpan";
+//       JOptionPane.showMessageDialog(null,dialogsave,"Message",JOptionPane.INFORMATION_MESSAGE);
+//       TampilData td = new TampilData();
+//       td.setVisible(true);
        
     }//GEN-LAST:event_ClickSimpan
 
     private void ClickBatal(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ClickBatal
-        this.setVisible(false); // tutup tambah data form
-       
-       // buat form tampil data
-       TampilData td = new TampilData();
-       td.setVisible(true);
+//        this.setVisible(false); // tutup tambah data form
+//       
+//       // buat form tampil data
+//       TampilData td = new TampilData();
+//       td.setVisible(true);
     }//GEN-LAST:event_ClickBatal
 
     /**

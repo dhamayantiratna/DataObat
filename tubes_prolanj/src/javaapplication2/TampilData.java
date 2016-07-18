@@ -5,17 +5,60 @@
  */
 package javaapplication2;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+
 /**
  *
  * @author billy
  */
 public class TampilData extends javax.swing.JFrame {
 
+    private DB db;
+    private TblObatModel tblObatModel;
+    private JDialogTambahObat jDialogTambahObat;
+    private JDialogEditObat jDialogEditObat;
+
+    public TblObatModel getTblObatModel() {
+        return tblObatModel;
+    }
+
     /**
      * Creates new form NewJFrame
      */
-    public TampilData() {
+    public TampilData(DB db) {
+        this.setResizable(false);
+        this.db = db;
         initComponents();
+        tblObatModel = new TblObatModel(db);
+        jtblObat.setModel(tblObatModel);
+        jDialogTambahObat = new JDialogTambahObat(db, this, true);
+        jDialogEditObat = new JDialogEditObat(db, this, true);
+                
+        jtblObat.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+
+            @Override
+            public void valueChanged(ListSelectionEvent lse) {
+                if (lse.getValueIsAdjusting()) {
+                    
+                    jBtnHapus.setText("Hapus");
+                    
+                    if (jtblObat.getSelectedRow() > -1) {
+                        String kodeObat = jtblObat.getValueAt(jtblObat.getSelectedRow(), 0).toString();
+                        jBtnHapus.setText(String.format("Hapus (%d)", jtblObat.getSelectedRowCount()));
+                        
+                        jBtnClear.setEnabled(true);
+                        jBtnEdit.setEnabled(true);
+                        jBtnHapus.setEnabled(true);
+                    }
+                }
+            }
+        });
     }
 
     /**
@@ -28,17 +71,18 @@ public class TampilData extends javax.swing.JFrame {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        jtblObat = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jTextField1 = new javax.swing.JTextField();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        jBtnEdit = new javax.swing.JButton();
+        jtfSearch = new javax.swing.JTextField();
+        jbtnCari = new javax.swing.JButton();
+        jBtnHapus = new javax.swing.JButton();
+        jBtnClear = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jtblObat.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null},
                 {null, null, null, null, null, null},
@@ -49,26 +93,54 @@ public class TampilData extends javax.swing.JFrame {
                 "Kode", "Nama Obat", "Harga Beli", "Harga Jual", "Satuan", "Stok"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(jtblObat);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         jLabel1.setText("Data Obat");
 
         jButton1.setText("Tambah Data");
-        jButton1.setActionCommand("Tambah Data");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 OpenTambah(evt);
             }
         });
 
-        jButton2.setText("Ubah");
-        jButton2.setEnabled(false);
+        jBtnEdit.setText("Ubah");
+        jBtnEdit.setEnabled(false);
+        jBtnEdit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBtnEditActionPerformed(evt);
+            }
+        });
 
-        jButton3.setText("Cari");
+        jtfSearch.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jtfSearchKeyPressed(evt);
+            }
+        });
 
-        jButton4.setText("Hapus");
-        jButton4.setEnabled(false);
+        jbtnCari.setText("Cari");
+        jbtnCari.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnCariActionPerformed(evt);
+            }
+        });
+
+        jBtnHapus.setText("Hapus");
+        jBtnHapus.setEnabled(false);
+        jBtnHapus.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBtnHapusActionPerformed(evt);
+            }
+        });
+
+        jBtnClear.setEnabled(false);
+        jBtnClear.setLabel("Clear");
+        jBtnClear.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBtnClearActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -81,15 +153,17 @@ public class TampilData extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jButton1)
                         .addGap(2, 2, 2)
-                        .addComponent(jButton2)
+                        .addComponent(jBtnEdit)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton4)
-                        .addGap(96, 96, 96)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jBtnHapus)
+                        .addGap(5, 5, 5)
+                        .addComponent(jBtnClear)
+                        .addGap(18, 18, 18)
+                        .addComponent(jtfSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton3))
+                        .addComponent(jbtnCari))
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(24, Short.MAX_VALUE))
+                .addContainerGap(40, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -99,10 +173,11 @@ public class TampilData extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
-                    .addComponent(jButton2)
-                    .addComponent(jButton4)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton3))
+                    .addComponent(jBtnEdit)
+                    .addComponent(jBtnHapus)
+                    .addComponent(jtfSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jbtnCari)
+                    .addComponent(jBtnClear))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(21, Short.MAX_VALUE))
@@ -112,60 +187,86 @@ public class TampilData extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void OpenTambah(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OpenTambah
-       this.setVisible(false); // tutup tampil form
-       
-       // buat form tambah data
-       TambahData td = new TambahData();
-       td.setVisible(true);
+        /* Create and display the dialog */
+        jDialogTambahObat.clearForm();
+        jDialogTambahObat.setVisible(true);
     }//GEN-LAST:event_OpenTambah
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
+    private void jbtnCariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnCariActionPerformed
+        // TODO add your handling code here:
+        String query = jtfSearch.getText();
+        tblObatModel.search(query);
+    }//GEN-LAST:event_jbtnCariActionPerformed
+
+    private void jtfSearchKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfSearchKeyPressed
+        // TODO add your handling code here:
+        if (evt.getKeyCode() == 10) {
+            jbtnCariActionPerformed(null);
+        }
+    }//GEN-LAST:event_jtfSearchKeyPressed
+
+    private void jBtnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnClearActionPerformed
+        // TODO add your handling code here:
+        jBtnClear.setEnabled(false);
+        jBtnEdit.setEnabled(false);
+        jBtnHapus.setEnabled(false);
+        jtblObat.clearSelection();
+    }//GEN-LAST:event_jBtnClearActionPerformed
+
+    private void jBtnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnHapusActionPerformed
+        // TODO add your handling code here:
+
+        int[] rows = jtblObat.getSelectedRows();
+        int[] ids = new int[rows.length];
+        for (int i = 0; i < rows.length; i++) {
+            ids[i] = Integer.valueOf((String) jtblObat.getValueAt(rows[i], 0));
+        }
+
         try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
+            db.deleteObat(ids);
+
+            String dialogsave = "Data berhasil dihapus.";
+            JOptionPane.showMessageDialog(null, dialogsave, "Message", JOptionPane.INFORMATION_MESSAGE);
+            tblObatModel.search("");
+        } catch (SQLException ex) {
+            Logger.getLogger(TampilData.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jBtnHapusActionPerformed
+
+    private void jBtnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnEditActionPerformed
+        // TODO add your handling code here:
+        int[] selectedRows = jtblObat.getSelectedRows();
+        if (selectedRows.length > 0) {
+            int firstSelectedRow = selectedRows[0];
+            int id = Integer.parseInt((String) jtblObat.getValueAt(firstSelectedRow, 0));
+            ResultSet obat = db.getObat(id);
+            if (obat != null) {
+                try {
+                    System.out.println();
+                    
+                    jDialogEditObat.getjTfKode().setText(obat.getString("id"));
+                    jDialogEditObat.getjTfNamaObat().setText(obat.getString("nama_obat"));
+                    jDialogEditObat.getjTfHargaBeli().setText(obat.getString("harga_beli"));
+                    jDialogEditObat.getjTfHargaJual().setText(obat.getString("harga_jual"));
+                    jDialogEditObat.getjCBoxSatuan().setSelectedItem(obat.getString("satuan"));
+                    jDialogEditObat.getjSpinStok().setValue(obat.getInt("stok"));
+                    jDialogEditObat.setVisible(true);
+                } catch (SQLException ex) {
+                    Logger.getLogger(TampilData.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(TampilData.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(TampilData.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(TampilData.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(TampilData.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new TampilData().setVisible(true);
-            }
-        });
-    }
+    }//GEN-LAST:event_jBtnEditActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jBtnClear;
+    private javax.swing.JButton jBtnEdit;
+    private javax.swing.JButton jBtnHapus;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JButton jbtnCari;
+    private javax.swing.JTable jtblObat;
+    private javax.swing.JTextField jtfSearch;
     // End of variables declaration//GEN-END:variables
-
 }
